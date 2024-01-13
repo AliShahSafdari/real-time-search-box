@@ -24,8 +24,6 @@ default: &default
 development:
   <<: *default
   database: real2_time_search_box_development
-  
-
   username: postgres
   password: Ali12345
   host: localhost

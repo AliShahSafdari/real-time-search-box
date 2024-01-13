@@ -1,0 +1,55 @@
+<%= stylesheet_link_tag "styles", "data-turbo-track": "reload" %>
+  <h1 class = "title">Real-Time Search Articles</h1>
+
+  <div id="search-box" class = "search-box">
+    <input type="text" id="search-input" placeholder="Search an article...">
+  </div>
+  <div id="search-results" class="search-results">
+  <h2>Recent Searches </h2>
+  <table id="search-table" class="search-table">
+    <thead>
+      <tr>
+        <th>Articles</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @search_terms.each do |search_term| %>
+        <tr>
+          <td><strong> Article : </strong> <%= search_term.term %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+  <script>
+    const searchInput = document.getElementById('search-input');
+    const searchList = document.getElementById('search-list');
+
+    searchInput.addEventListener('input', debounce(() => {
+      const term = searchInput.value.trim();
+
+      // Send the search term to the server
+      fetch('/search', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+        },
+        body: JSON.stringify({ term: term })
+      });
+
+    }, 500)); // Adjust the debounce time as needed
+
+    function debounce(func, wait) {
+      let timeout;
+      return function executedFunction(...args) {
+        const later = () => {
+          clearTimeout(timeout);
+          func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+      };
+    }
+  </script>
