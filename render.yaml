@@ -1,6 +1,6 @@
 databases:
-  - name: real-time-search-box
-    databaseName: real-time-search
+  - name: mysite
+    databaseName: mysite
     user: mysite
     plan: free
 
@@ -13,11 +13,11 @@ services:
     # preDeployCommand: "./bin/rails db:migrate" # preDeployCommand only available on paid instance types
     startCommand: "./bin/rails server"
     envVars:
-      - key: postgres://real_time_search_6w5k_user:osTbd163wGijO6G2r2wpe09RZ9I1dlh7@dpg-cmh8vb7qd2ns73fpjpig-a/real_time_search_6w5k
+      - key: DATABASE_URL
         fromDatabase:
-          name: real-time-search-box
+          name: mysite
           property: connectionString
-      - key: c30bbaaac9ce802d4a01c27bc4f22c77
+      - key: RAILS_MASTER_KEY
         sync: false
       - key: WEB_CONCURRENCY
         value: 2 # sensible default
