@@ -2,17 +2,22 @@ databases:
   - name: realtime_4esr
     databaseName: realtime_4esr
     user: realtime_4esr_user
+    plan: free
 
 services:
   - type: web
-    name: realtimesearch
-    env: ruby
+    name: real-time-search
+    runtime: ruby
+    plan: free
     buildCommand: "./bin/render-build.sh"
-    startCommand: "bundle exec puma -C config/puma.rb"
+    # preDeployCommand: "./bin/rails db:migrate" # preDeployCommand only available on paid instance types
+    startCommand: "./bin/rails server"
     envVars:
       - key: DATABASE_URL
         fromDatabase:
-          name: realtime_4esr_user
+          name: realtime_4esr
           property: connectionString
       - key: RAILS_MASTER_KEY
         sync: false
+      - key: WEB_CONCURRENCY
+        value: 2 # sensible default
